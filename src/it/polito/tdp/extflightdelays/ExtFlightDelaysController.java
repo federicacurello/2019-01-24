@@ -47,16 +47,32 @@ public class ExtFlightDelaysController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	setCmbBoxStati();
+    	txtResult.clear();
+    	model.creaGrafo();
     }
+    
 
-    @FXML
+    public void setCmbBoxStati() {
+    	cmbBoxStati.getItems().addAll(model.loadAllStates());
+		
+	}
+
+
+	@FXML
     void doSimula(ActionEvent event) {
 
     }
 
     @FXML
     void doVisualizzaVelivoli(ActionEvent event) {
+    	if(cmbBoxStati.getValue()==null) {
+    		txtResult.setText("Selezionare uno stato!");
+    		return;
+    	}
+    	else {
+    		txtResult.setText(model.visualizza(cmbBoxStati.getValue()));
+    	}
 
     }
     
