@@ -1,40 +1,47 @@
 package it.polito.tdp.extflightdelays.model;
 
 public class Collegamenti implements Comparable<Collegamenti>{
-	private String stato1;
-	private String stato2;
+	private Airport a1;
+	private Airport a2;
 	private int peso;
-	public Collegamenti(String stato1, String stato2, int peso) {
-		this.stato1 = stato1;
-		this.stato2 = stato2;
+	public Collegamenti(Airport a1, Airport a2, int peso) {
+		this.a1 = a1;
+		this.a2 = a2;
 		this.peso = peso;
 	}
-	public String getStato1() {
-		return stato1;
-	}
-	public void setStato1(String stato1) {
-		this.stato1 = stato1;
-	}
-	public String getStato2() {
-		return stato2;
-	}
-	public void setStato2(String stato2) {
-		this.stato2 = stato2;
-	}
+
 	public int getPeso() {
 		return peso;
 	}
 	public void setPeso(int peso) {
 		this.peso = peso;
 	}
+	
+	public Airport getA1() {
+		return a1;
+	}
+
+	public void setA1(Airport a1) {
+		this.a1 = a1;
+	}
+
+	public Airport getA2() {
+		return a2;
+	}
+
+	public void setA2(Airport a2) {
+		this.a2 = a2;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((stato1 == null) ? 0 : stato1.hashCode());
-		result = prime * result + ((stato2 == null) ? 0 : stato2.hashCode());
+		result = prime * result + ((a1 == null) ? 0 : a1.hashCode());
+		result = prime * result + ((a2 == null) ? 0 : a2.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -44,18 +51,19 @@ public class Collegamenti implements Comparable<Collegamenti>{
 		if (getClass() != obj.getClass())
 			return false;
 		Collegamenti other = (Collegamenti) obj;
-		if (stato1 == null) {
-			if (other.stato1 != null)
+		if (a1 == null) {
+			if (other.a1 != null)
 				return false;
-		} else if (!stato1.equals(other.stato1))
+		} else if (!a1.equals(other.a1))
 			return false;
-		if (stato2 == null) {
-			if (other.stato2 != null)
+		if (a2 == null) {
+			if (other.a2 != null)
 				return false;
-		} else if (!stato2.equals(other.stato2))
+		} else if (!a2.equals(other.a2))
 			return false;
 		return true;
 	}
+
 	@Override
 	public int compareTo(Collegamenti altro) {
 		

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import it.polito.tdp.extflightdelays.model.Airline;
 import it.polito.tdp.extflightdelays.model.Airport;
@@ -61,7 +62,7 @@ public class ExtFlightDelaysDAO {
 		}
 	}
 
-	public List<Airport> loadAllAirports() {
+	public List<Airport> loadAllAirports(Map<Integer, Airport> airports) {
 		String sql = "SELECT * FROM airports";
 		List<Airport> result = new ArrayList<Airport>();
 
@@ -74,6 +75,7 @@ public class ExtFlightDelaysDAO {
 				Airport airport = new Airport(rs.getInt("ID"), rs.getString("IATA_CODE"), rs.getString("AIRPORT"),
 						rs.getString("CITY"), rs.getString("STATE"), rs.getString("COUNTRY"), rs.getDouble("LATITUDE"),
 						rs.getDouble("LONGITUDE"), rs.getDouble("TIMEZONE_OFFSET"));
+				airports.put(airport.getId(), airport);
 				result.add(airport);
 			}
 
@@ -116,12 +118,12 @@ public class ExtFlightDelaysDAO {
 			throw new RuntimeException("Error Connection Database");
 		}
 	}
-	public List<Collegamenti> trovaArchi() {
-		String sql = "SELECT distinct a1.STATE AS stato1, a2.state AS stato2, COUNT(DISTINCT f.TAIL_NUMBER) AS cnt " + 
+	public List<Collegamenti> trovaArchi(Map<Integer, Airport> airports) {
+		String sql = "SELECT a1.ID AS id1, a2.ID AS id2, COUNT(DISTINCT f.TAIL_NUMBER) AS cnt " + 
 				"FROM flights AS f, airports AS a1, airports AS a2 " + 
 				"WHERE f.ORIGIN_AIRPORT_ID= a1.ID  " + 
 				"AND f.DESTINATION_AIRPORT_ID= a2.ID " + 
-				"GROUP BY a1.state, a2.state " + 
+				"GROUP BY id1, id2 " + 
 				"ORDER BY cnt desc ";
 		List<Collegamenti> result = new LinkedList<Collegamenti>();
 
@@ -131,7 +133,7 @@ public class ExtFlightDelaysDAO {
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
-				Collegamenti c = new Collegamenti( rs.getString("stato1"), rs.getString("stato2"), rs.getInt("cnt"));
+				Collegamenti c = new Collegamenti( airports.get(rs.getInt("id1")), airports.get(rs.getInt("id2")), rs.getInt("cnt"));
 				result.add(c);
 			}
 

@@ -1,7 +1,9 @@
 package it.polito.tdp.extflightdelays.model;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
@@ -14,18 +16,20 @@ public class Model {
 	DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> grafo;
 	ExtFlightDelaysDAO dao;
 	List<Collegamenti> coll;
+	Map<Integer, Airport> airports;
 
 	public Model() {
 		grafo= new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 		dao= new ExtFlightDelaysDAO();
-		
+		airports= new HashMap<Integer, Airport>();
 	}
 	
 	public void creaGrafo() {
 		Graphs.addAllVertices(grafo, dao.loadAllStates() );
-		coll= new LinkedList<Collegamenti>(dao.trovaArchi());
+		dao.loadAllAirports(airports);
+		coll= new LinkedList<Collegamenti>(dao.trovaArchi(airports));
 		for(Collegamenti c: coll) {
-			Graphs.addEdgeWithVertices(grafo, c.getStato1(), c.getStato2(), c.getPeso());
+			Graphs.addEdgeWithVertices(grafo, c.getA1().getState(), c.getA2().getState(), c.getPeso());
 		}
 		System.out.println("Creato grafo con "+ grafo.vertexSet().size()+" vertici e "
 				+ grafo.edgeSet().size()+" archi");
